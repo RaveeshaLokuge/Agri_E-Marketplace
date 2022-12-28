@@ -112,6 +112,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'id1': id1,
             'imgUrl1': imgUrl1,
             'id': id,
+            'numberof_img': 1,
             'sold': Sold,
           });
         } else if (count == 2) {
@@ -132,6 +133,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'imgUrl1': imgUrl1,
             'imgUrl2': imgUrl2,
             'id': id,
+            'numberof_img': 2,
             'sold': Sold,
           });
         } else if (count == 3) {
@@ -154,6 +156,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'imgUrl2': imgUrl2,
             'imgUrl3': imgUrl3,
             'id': id,
+            'numberof_img': 3,
             'sold': Sold,
           });
         } else if (count == 4) {
@@ -178,6 +181,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'imgUrl3': imgUrl3,
             'imgUrl4': imgUrl4,
             'id': id,
+            'numberof_img': 4,
             'sold': Sold,
           });
         } else if (count == 5) {
@@ -204,6 +208,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'imgUrl4': imgUrl4,
             'imgUrl5': imgUrl5,
             'id': id,
+            'numberof_img': 5,
             'sold': Sold,
           });
         } else {
@@ -550,39 +555,6 @@ class _ProductPreviewState extends State<ProductPreview> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        // Padding(
-                        //   padding: const EdgeInsets.all(1.0),
-                        //   child: Column(
-                        //     crossAxisAlignment: CrossAxisAlignment.center,
-                        //     children: const <Widget>[
-                        //       SizedBox(
-                        //         height: 12,
-                        //       ),
-                        //       // const Text(
-                        //       //   "Product Name",
-                        //       //   style: TextStyle(color: Colors.white),
-                        //       // ),
-
-                        //       //title
-                        //       // Container(
-                        //       //   width: 350,
-                        //       //   alignment: Alignment.center,
-                        //       //   child: Text(
-                        //       //     ' ${widget.title}',
-                        //       //     style: Theme.of(context)
-                        //       //         .textTheme
-                        //       //         .headline4!
-                        //       //         .copyWith(
-                        //       //             color: Colors.white,
-                        //       //             fontWeight: FontWeight.bold),
-                        //       //   ),
-                        //       // ),
-                        //       SizedBox(
-                        //         height: 10,
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
                         const SizedBox(
                           height: 15,
                         ),
@@ -608,11 +580,9 @@ class _ProductPreviewState extends State<ProductPreview> {
                             return buildImage(index);
                           },
                         ),
-
                         const SizedBox(
                           height: 7,
                         ),
-
                         buildIndicator(),
                       ],
                     )),
@@ -782,32 +752,6 @@ class _ProductPreviewState extends State<ProductPreview> {
                     height: 40,
                   ),
 
-                  // Padding(
-                  //   padding: const EdgeInsets.only(top: 20.0, bottom: 0.5),
-                  //   child: Container(
-                  //     color: Colors.grey[100],
-                  //     height: 100.0,
-                  //     width: double.infinity,
-                  //     child: RichText(
-                  //       text: TextSpan(
-                  //         children: [
-                  //           const TextSpan(
-                  //               text: "Descreption\n",
-                  //               style: TextStyle(color: Colors.black)),
-                  //           TextSpan(
-                  //             text:
-                  //                 ' ${widget.descreption}', /////////////////////////////////////////////////////////////////
-                  //             style: TextStyle(
-                  //                 fontSize: 15,
-                  //                 color: Colors.indigo.shade600,
-                  //                 fontWeight: FontWeight.bold),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-
                   SizedBox(
                     height: 52,
                     width: 300,
@@ -834,32 +778,6 @@ class _ProductPreviewState extends State<ProductPreview> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => const HomeScreen()));
-
-                          // int b = 5;
-                          // if (isUploaded == false) {
-                          //   // SendDataToDatabase(kgs:widget.kgs);
-                          //   a = await compute(sendImg, );
-                          //   await SendData();
-                          //   setState(() {
-                          //     isUploaded = true;
-                          //   });
-                          // } else {
-                          //   await Timer(Duration(seconds: 5), () {
-                          //     navigateHome;
-                          //   });
-                          // FirebaseStorage storage = FirebaseStorage.instance;
-                          // await storage
-                          //     .ref()
-                          //     .child('Productdata/$id1')
-                          //     .getDownloadURL()
-                          //     .then(
-                          //       (value) => {navigateHome()},
-                          //     );
-                          //     .then((value) {
-                          //   navigateHome();
-                          //   showSnackBarText('still uploading');
-                          // });
-                          // }
                         },
                         child: Shimmer.fromColors(
                           baseColor: Colors.indigo.shade900,
@@ -900,17 +818,6 @@ class _ProductPreviewState extends State<ProductPreview> {
           fit: BoxFit.cover,
         ),
       );
-  // Container(
-  //       margin: const EdgeInsets.symmetric(horizontal: 2),
-  //       color: Colors.grey,
-  //       width: double.infinity,
-  // child: Image.file(
-  //   File(
-  //     widget.img[index].path,
-  //   ),
-  //   fit: BoxFit.cover,
-  // ),
-  // );
 
   Widget buildIndicator() => AnimatedSmoothIndicator(
         activeIndex: activeIndex,

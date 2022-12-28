@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   final product = snapshot.data();
 
                   return Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 10),
+                    padding: const EdgeInsets.fromLTRB(20, 20, 20, 20),
                     child: GestureDetector(
                       behavior: HitTestBehavior.translucent,
                       onTap: () {
