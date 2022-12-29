@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:gpsd_project/buyer_screens/buyer_profile.dart';
+import 'package:gpsd_project/screens/add_location_buy.dart';
 import 'package:gpsd_project/screens/signin_screen.dart';
 import 'package:gpsd_project/seller_screens/seller_profile.dart';
 import 'package:gpsd_project/transporter_screens/transporter_profile.dart';
@@ -21,6 +22,7 @@ class _ProductScreenState extends State<ProductScreen> {
   final TextEditingController _searchTextController = TextEditingController();
   late SharedPreferences sharedPreferences;
   int activeIndex = 0;
+  late String productdocid;
   List<NetworkImage> images = [];
   CarouselController buttonCarouselController = CarouselController();
 
@@ -30,7 +32,7 @@ class _ProductScreenState extends State<ProductScreen> {
         .collection("Product_Data")
         .where('id', isEqualTo: sharedPreferences.getString(widget.productid))
         .get();
-
+    productdocid = snap.docs[0].id;
     print(snap.docs[0].id);
 
     final docProduct = FirebaseFirestore.instance
@@ -326,19 +328,31 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                         ),
                         onPressed: () async {
-                          // // SendDataToDatabase(kgs:widget.kgs);
-                          // sendImg();
-
-                          // Navigator.push(
-                          //     context,
-                          //     MaterialPageRoute(
-                          //         builder: (context) => const HomeScreen()));
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SelectLocationBuying(
+                                        district: product.district,
+                                        productdocid: productdocid,
+                                        id1: product.id1,
+                                        imgUrl1: product.imgUrl1,
+                                        price: product.price,
+                                        productname: product.productname,
+                                        province: product.province,
+                                        sellerusername: product.sellerusername,
+                                        title: product.title,
+                                        village: product.village,
+                                        weight: product.weight,
+                                        sellerlat: product.latitude,
+                                        sellerlng: product.latitude,
+                                        productid: product.id,
+                                      )));
                         },
                         child: Shimmer.fromColors(
                           baseColor: Colors.indigo.shade900,
                           highlightColor: Colors.blueGrey.shade600,
                           child: Text(
-                            "Upload".toUpperCase(),
+                            "Select location".toUpperCase(),
                             style: const TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 17),
                           ),
