@@ -196,37 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 height: 250,
                                 child: Image(
                                   image: NetworkImage(product.imgUrl1),
-                                )
-                                // Image.asset('assets/images/ladyfingers.jpg'),
-                                // Image.asset('assets/images/ladyfingers.jpg'),
-                                // FutureBuilder(
-                                //     future: getImage(product.id1),
-                                //     builder: (BuildContext context,
-                                //         AsyncSnapshot snapshot) {
-                                //       if (snapshot.connectionState ==
-                                //           ConnectionState.done) {
-                                //         if (snapshot.data == null) {
-                                //           return Image.asset(
-                                //               'assets/images/loading.gif');
-                                //         } else {
-                                //           return Image(
-                                //               image: NetworkImage(
-                                //                   snapshot.data.toString()));
-                                //           // Text(snapshot.data.toString());
-                                //         }
-                                //       } else if (snapshot.connectionState ==
-                                //           ConnectionState.waiting) {
-                                //         return Image.asset(
-                                //             'assets/images/loading.gif');
-                                //         // loading
-                                //       } else {
-                                //         return Image.asset(
-                                //             'assets/images/loading.gif');
-                                //         // error
-
-                                //       }
-                                //     }),
-                                ),
+                                )),
                             const SizedBox(
                               height: 10,
                             ),

@@ -30,7 +30,7 @@ class _ProductScreenState extends State<ProductScreen> {
     sharedPreferences = await SharedPreferences.getInstance();
     QuerySnapshot snap = await FirebaseFirestore.instance
         .collection("Product_Data")
-        .where('id', isEqualTo: sharedPreferences.getString(widget.productid))
+        .where('id', isEqualTo: widget.productid)
         .get();
     productdocid = snap.docs[0].id;
     print(snap.docs[0].id);
