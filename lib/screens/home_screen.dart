@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutterfire_ui/firestore.dart';
 import 'package:gpsd_project/buyer_screens/buyer_profile.dart';
 import 'package:gpsd_project/screens/product_screen.dart';
+import 'package:gpsd_project/screens/search_reslts.dart';
 import 'package:gpsd_project/screens/signin_screen.dart';
 import 'package:gpsd_project/seller_screens/seller_profile.dart';
 import 'package:gpsd_project/transporter_screens/transporter_profile.dart';
@@ -107,7 +108,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: TextStyle(color: Colors.black.withOpacity(0.9)),
                 decoration: InputDecoration(
                   suffixIcon: GestureDetector(
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => SearchResults(
+                                    searchtext: _searchTextController.text,
+                                  )));
+                    },
                     child: const Icon(
                       Icons.search_rounded,
                     ),

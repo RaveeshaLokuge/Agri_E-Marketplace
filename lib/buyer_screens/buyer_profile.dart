@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:gpsd_project/buyer_screens/buyersorder.dart';
 import 'package:gpsd_project/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -11,6 +12,7 @@ class BuyerProfile extends StatefulWidget {
 }
 
 class _BuyerProfileState extends State<BuyerProfile> {
+  late String logedusername;
   late SharedPreferences sharedPreferences;
   @override
   Widget build(BuildContext context) {
@@ -61,6 +63,46 @@ class _BuyerProfileState extends State<BuyerProfile> {
                 ),
                 child: const Text(
                   'Log out',
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+              ),
+            ),
+            Container(
+              width: 250,
+              height: 50,
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(90)),
+              child: ElevatedButton(
+                onPressed: () async {
+                  sharedPreferences = await SharedPreferences.getInstance();
+                  logedusername =
+                      await sharedPreferences.getString('username')!;
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (context) => BuyerOrdersScreen(
+                        logedusername: logedusername,
+                      ),
+                    ),
+                  );
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Color.fromARGB(66, 59, 83, 21);
+                    }
+                    return Color.fromARGB(255, 156, 150, 121);
+                  }),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                  ),
+                ),
+                child: const Text(
+                  'Orders',
                   style: TextStyle(
                       color: Colors.black87,
                       fontWeight: FontWeight.bold,

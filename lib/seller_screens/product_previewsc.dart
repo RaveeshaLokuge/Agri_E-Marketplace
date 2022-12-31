@@ -84,6 +84,8 @@ class _ProductPreviewState extends State<ProductPreview> {
     final id5 = uuid.v1();
     final id6 = uuid.v1();
     final id = uuid.v1();
+    List<String> splittitle = [];
+    splittitle = widget.title.split(' ');
 
     SendData() async {
       sharedPreferences = await SharedPreferences.getInstance();
@@ -114,6 +116,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'id': id,
             'numberof_img': 1,
             'sold': Sold,
+            'splittitle': splittitle,
           });
         } else if (count == 2) {
           await ProductData.add({
@@ -135,6 +138,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'id': id,
             'numberof_img': 2,
             'sold': Sold,
+            'splittitle': splittitle,
           });
         } else if (count == 3) {
           await ProductData.add({
@@ -158,6 +162,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'id': id,
             'numberof_img': 3,
             'sold': Sold,
+            'splittitle': splittitle,
           });
         } else if (count == 4) {
           await ProductData.add({
@@ -183,6 +188,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'id': id,
             'numberof_img': 4,
             'sold': Sold,
+            'splittitle': splittitle,
           });
         } else if (count == 5) {
           await ProductData.add({
@@ -210,6 +216,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'id': id,
             'numberof_img': 5,
             'sold': Sold,
+            'splittitle': splittitle,
           });
         } else {
           print('image id upload fail');
@@ -227,6 +234,7 @@ class _ProductPreviewState extends State<ProductPreview> {
             'longitude': widget.lng,
             'id': id,
             'sold': Sold,
+            'splittitle': splittitle,
           });
         }
 

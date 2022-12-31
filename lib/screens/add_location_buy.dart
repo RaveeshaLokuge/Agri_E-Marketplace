@@ -261,12 +261,17 @@ class Order_Details {
   final double sellerlng;
   final String id1;
   final String imgUrl1;
-
+  bool transporterselected;
+  bool transporteraccepted;
   bool shipped;
+  bool completed;
 
   Order_Details({
     this.id = '',
-    this.shipped = false,
+    this.transporterselected = false,
+    this.transporteraccepted = false,
+    this.shipped = true,
+    this.completed = false,
     required this.productdocid,
     required this.productid,
     required this.buyerid,
@@ -287,7 +292,10 @@ class Order_Details {
   });
   Map<String, dynamic> toJson() => {
         'id': id,
+        'transporterselected': transporterselected,
+        'transporteraccepted': transporteraccepted,
         'shipped': shipped,
+        'completed': completed,
         'productdocid': productdocid,
         'productid': productid,
         'buyerid': buyerid,
