@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutterfire_ui/firestore.dart';
+import 'package:gpsd_project/seller_screens/search_transporter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class OrdersScreen extends StatefulWidget {
@@ -152,6 +153,11 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                   child: ElevatedButton(
                                     onPressed: () async {
                                       if (order.transporterselected == false) {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const SearchTransporter()));
                                         //select transporter
                                       } else {
                                         if (order.transporteraccepted ==

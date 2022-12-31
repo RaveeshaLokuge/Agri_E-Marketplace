@@ -143,7 +143,7 @@ class _ProductListState extends State<ProductList> {
             ),
             //Enter title text field
             formTextFieldString(
-                "Enter a Title", Icons.title, _titleTextController),
+                "Enter a Title", Icons.title, _titleTextController, 30),
             const SizedBox(
               height: 20,
             ),
@@ -160,19 +160,76 @@ class _ProductListState extends State<ProductList> {
               child: _getgrid(),
             ),
             //vegetable name text field
-            formTextField("Name of the Vegetable", Icons.crisis_alert,
-                _productNameController),
+            formTextFieldString("Name of the Vegetable", Icons.crisis_alert,
+                _productNameController, 10),
             const SizedBox(
               height: 20,
             ),
             //Weight text field
-            formTextField(
-                "Veight of the Harvest", Icons.scale, _weightTextController),
+            SizedBox(
+              width: 350.0,
+              child: TextField(
+                controller: _weightTextController,
+                keyboardType: TextInputType.number,
+                obscureText: false,
+                enableSuggestions: true,
+                autocorrect: true,
+                cursorColor: Colors.black45,
+                style: TextStyle(color: Colors.black.withOpacity(0.9)),
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.scale,
+                    color: Colors.black45,
+                  ),
+                  suffixText: 'kg',
+                  labelText: "Weight of the Harvest",
+                  labelStyle: TextStyle(color: Colors.black.withOpacity(0.9)),
+                  filled: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  fillColor:
+                      const Color.fromARGB(255, 185, 224, 186).withOpacity(0.3),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide:
+                        const BorderSide(width: 0, style: BorderStyle.none),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(
               height: 20,
             ),
             //Price text field
-            formTextField("Price", Icons.price_change, _priceController),
+            SizedBox(
+              width: 350.0,
+              child: TextField(
+                controller: _priceController,
+                keyboardType: TextInputType.number,
+                obscureText: false,
+                enableSuggestions: true,
+                autocorrect: true,
+                cursorColor: Colors.black45,
+                style: TextStyle(color: Colors.black.withOpacity(0.9)),
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.price_change,
+                    color: Colors.black45,
+                  ),
+                  prefixText: 'Rs. ',
+                  labelText: "Price",
+                  labelStyle: TextStyle(color: Colors.black.withOpacity(0.9)),
+                  filled: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  fillColor:
+                      const Color.fromARGB(255, 185, 224, 186).withOpacity(0.3),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide:
+                        const BorderSide(width: 0, style: BorderStyle.none),
+                  ),
+                ),
+              ),
+            ),
             const SizedBox(
               height: 20,
             ),
@@ -574,7 +631,7 @@ class _ProductListState extends State<ProductList> {
             if (images.length == 5) {
               showDialog(
                   context: context,
-                  builder: (context) => AlertDialog(
+                  builder: (context) => const AlertDialog(
                         title: Text("You can add only 5 photos "),
                       ));
               return;
@@ -588,7 +645,7 @@ class _ProductListState extends State<ProductList> {
               if (count < 0) {
                 showDialog(
                     context: context,
-                    builder: (context) => AlertDialog(
+                    builder: (context) => const AlertDialog(
                           title: Text("You can add only 5 photos "),
                         ));
               } else {

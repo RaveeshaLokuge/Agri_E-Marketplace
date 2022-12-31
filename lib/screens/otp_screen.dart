@@ -73,7 +73,7 @@ class _OTPScreenState extends State<OTPScreen> {
           );
           createUser(user: user);
           Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => HomeScreen()),
+            MaterialPageRoute(builder: (context) => const HomeScreen()),
           );
         },
       ).whenComplete(() {});

@@ -3,11 +3,12 @@ import 'package:intl_phone_field/intl_phone_field.dart';
 import '../screens/product_screen.dart';
 
 SizedBox formTextFieldString(
-    String text, IconData icon, TextEditingController controller) {
+    String text, IconData icon, TextEditingController controller, int length) {
   return SizedBox(
     width: 350.0,
     child: TextField(
       controller: controller,
+      maxLength: length,
       obscureText: false,
       enableSuggestions: true,
       autocorrect: true,
@@ -32,6 +33,36 @@ SizedBox formTextFieldString(
   );
 }
 
+SizedBox formTextFieldint(
+    String text, IconData icon, TextEditingController controller) {
+  return SizedBox(
+    width: 350.0,
+    child: TextField(
+      controller: controller,
+      keyboardType: TextInputType.number,
+      obscureText: false,
+      enableSuggestions: true,
+      autocorrect: true,
+      cursorColor: Colors.black45,
+      style: TextStyle(color: Colors.black.withOpacity(0.9)),
+      decoration: InputDecoration(
+        prefixIcon: Icon(
+          icon,
+          color: Colors.black45,
+        ),
+        labelText: text,
+        labelStyle: TextStyle(color: Colors.black.withOpacity(0.9)),
+        filled: true,
+        floatingLabelBehavior: FloatingLabelBehavior.never,
+        fillColor: const Color.fromARGB(255, 185, 224, 186).withOpacity(0.3),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30.0),
+          borderSide: const BorderSide(width: 0, style: BorderStyle.none),
+        ),
+      ),
+    ),
+  );
+}
 // SizedBox formTextFieldString(
 //     String text, IconData icon, TextEditingController controller) {
 //   return SizedBox(

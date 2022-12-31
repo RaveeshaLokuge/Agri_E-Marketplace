@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:gpsd_project/screens/home_screen.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:uuid/uuid.dart';
 
 class transporterOTP extends StatefulWidget {
   final String name;
@@ -16,6 +20,7 @@ class transporterOTP extends StatefulWidget {
   final String password;
   final String vehicleNum;
   final String vehicletype;
+  final File image;
   const transporterOTP({
     super.key,
     required this.phone,
@@ -28,6 +33,7 @@ class transporterOTP extends StatefulWidget {
     required this.name,
     required this.vehicleNum,
     required this.vehicletype,
+    required this.image,
   });
 
   @override
@@ -35,8 +41,10 @@ class transporterOTP extends StatefulWidget {
 }
 
 class _transporterOTPState extends State<transporterOTP> {
+  var uuid = Uuid();
   String otpPin = " ";
   late SharedPreferences sharedPreferences;
+  late String vehicleimgurl;
 
   Future<void> verifyOTP() async {
     try {
@@ -48,17 +56,8 @@ class _transporterOTPState extends State<transporterOTP> {
           .then(
         (value) async {
           showSnackBarText('Verified');
-          final user = User(
-            name: widget.name,
-            username: widget.username,
-            nic: widget.nic,
-            phoneno: widget.phone,
-            address: widget.address,
-            password: widget.password,
-            vehicleNumber: widget.vehicleNum,
-            vehicleType: widget.vehicletype,
-          );
-          createUser(user: user);
+          SendImage();
+
           sharedPreferences = await SharedPreferences.getInstance();
 
           //setting username for shared preferences
@@ -181,6 +180,37 @@ class _transporterOTPState extends State<transporterOTP> {
 
     await docUser.set(json);
   }
+
+  SendImage() async {
+    final vehicleimgid = uuid.v1();
+    try {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      var file;
+      file = File(widget.image.path);
+      await storage.ref().child('Productdata/$vehicleimgid').putFile(file);
+      vehicleimgurl = await storage
+          .ref()
+          .child('Productdata/$vehicleimgid')
+          .getDownloadURL();
+      print("number of image 1");
+
+      final user = User(
+        name: widget.name,
+        username: widget.username,
+        nic: widget.nic,
+        phoneno: widget.phone,
+        address: widget.address,
+        password: widget.password,
+        vehicleNumber: widget.vehicleNum,
+        vehicleType: widget.vehicletype,
+        vehicleimgurl: vehicleimgurl,
+        vehicleimgid: vehicleimgid,
+      );
+      createUser(user: user);
+    } catch (e) {
+      print('error');
+    }
+  }
 }
 
 // vehicleNumber: widget.vehicleNum,
@@ -196,6 +226,8 @@ class User {
   final String password;
   final String vehicleNumber;
   final String vehicleType;
+  final String vehicleimgurl;
+  final String vehicleimgid;
 
   User({
     this.id = '',
@@ -208,6 +240,8 @@ class User {
     required this.password,
     required this.vehicleNumber,
     required this.vehicleType,
+    required this.vehicleimgurl,
+    required this.vehicleimgid,
   });
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -220,5 +254,7 @@ class User {
         'password': password,
         'vehicleType': vehicleType,
         'vehicleNum': vehicleNumber,
+        'vehicleimgurl': vehicleimgurl,
+        'vehicleimgid': vehicleimgid,
       };
 }

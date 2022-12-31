@@ -85,7 +85,7 @@ class _ProductPreviewState extends State<ProductPreview> {
     final id6 = uuid.v1();
     final id = uuid.v1();
     List<String> splittitle = [];
-    splittitle = widget.title.split(' ');
+    splittitle = widget.title.toLowerCase().split(' ');
 
     SendData() async {
       sharedPreferences = await SharedPreferences.getInstance();

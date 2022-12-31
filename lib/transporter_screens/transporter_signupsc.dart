@@ -1,10 +1,16 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gpsd_project/screens/home_screen.dart';
 import 'package:gpsd_project/transporter_screens/transporter_otpscreen.dart';
 import 'package:intl_phone_field/intl_phone_field.dart';
+
+import 'package:image_picker/image_picker.dart';
 
 import '../reusable_widgets/reusable_widgets.dart';
 
@@ -18,6 +24,7 @@ class TransporterSignUp extends StatefulWidget {
 }
 
 class _TransporterSignUpState extends State<TransporterSignUp> {
+  File? image;
   String verID = " ";
   bool showpassword = true;
   String countryDial = "+94";
@@ -270,6 +277,21 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
                 ],
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _getPhoto(),
+            ),
+
+            image != null
+                ? Image.file(
+                    image!,
+                    width: 160,
+                    height: 160,
+                    fit: BoxFit.cover,
+                  )
+                : FlutterLogo(
+                    size: 160,
+                  ),
             const SizedBox(
               height: 30,
             ),
@@ -372,6 +394,7 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
                   name: _nameController.text,
                   vehicleNum: _vehicleNumberController.text,
                   vehicletype: vehicleType,
+                  image: image!,
                 )));
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -390,4 +413,60 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
           ),
         ),
       );
+  Widget _getPhoto() {
+    return RawMaterialButton(
+      onPressed: () {
+        _showModalBottomSheet(context);
+      },
+      elevation: 2.0,
+      fillColor: Colors.white,
+      padding: const EdgeInsets.all(40.0),
+      shape: const CircleBorder(),
+      child: const Icon(
+        CupertinoIcons.camera,
+        size: 20,
+      ),
+    );
+  }
+
+  Future _showModalBottomSheet(context) async {
+    //popup view
+    showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext context) => CupertinoActionSheet(
+              actions: [
+                CupertinoActionSheetAction(
+                    child: const Text("Pick Image from Camera",
+                        style: TextStyle(
+                            color: Color.fromARGB(179, 2, 0, 0),
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      _pickImage(ImageSource.camera);
+                    }),
+                CupertinoActionSheetAction(
+                    child: const Text("Pick Image from Gallery",
+                        style: TextStyle(
+                            color: Color.fromARGB(179, 0, 0, 0),
+                            fontWeight: FontWeight.bold)),
+                    onPressed: () {
+                      _pickImage(ImageSource.gallery);
+                    }),
+                SizedBox(
+                  height: 20,
+                ),
+              ],
+            ));
+  }
+
+  void _pickImage(ImageSource source) async {
+    try {
+      final image = await ImagePicker().pickImage(source: source);
+      if (image == null) return;
+
+      final imageTemporary = File(image.path);
+      setState(() => this.image = imageTemporary);
+    } catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
 }

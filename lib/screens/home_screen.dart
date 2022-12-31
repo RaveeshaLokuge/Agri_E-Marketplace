@@ -113,7 +113,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           context,
                           MaterialPageRoute(
                               builder: (context) => SearchResults(
-                                    searchtext: _searchTextController.text,
+                                    searchtext: _searchTextController.text
+                                        .toLowerCase(),
                                   )));
                     },
                     child: const Icon(
