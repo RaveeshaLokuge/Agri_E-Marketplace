@@ -20,6 +20,9 @@ class transporterOTP extends StatefulWidget {
   final String password;
   final String vehicleNum;
   final String vehicletype;
+  final String vehicledistrict;
+  final String vehicleprovince;
+  final String vehicleweightcap;
   final File image;
   const transporterOTP({
     super.key,
@@ -34,6 +37,9 @@ class transporterOTP extends StatefulWidget {
     required this.vehicleNum,
     required this.vehicletype,
     required this.image,
+    required this.vehicledistrict,
+    required this.vehicleprovince,
+    required this.vehicleweightcap,
   });
 
   @override
@@ -205,6 +211,9 @@ class _transporterOTPState extends State<transporterOTP> {
         vehicleType: widget.vehicletype,
         vehicleimgurl: vehicleimgurl,
         vehicleimgid: vehicleimgid,
+        vehicledistrict: widget.vehicledistrict,
+        vehicleprovince: widget.vehicleprovince,
+        vehicleweightcap: widget.vehicleweightcap,
       );
       createUser(user: user);
     } catch (e) {
@@ -228,6 +237,9 @@ class User {
   final String vehicleType;
   final String vehicleimgurl;
   final String vehicleimgid;
+  final String vehicledistrict;
+  final String vehicleprovince;
+  final String vehicleweightcap;
 
   User({
     this.id = '',
@@ -242,6 +254,9 @@ class User {
     required this.vehicleType,
     required this.vehicleimgurl,
     required this.vehicleimgid,
+    required this.vehicledistrict,
+    required this.vehicleprovince,
+    required this.vehicleweightcap,
   });
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -256,5 +271,8 @@ class User {
         'vehicleNum': vehicleNumber,
         'vehicleimgurl': vehicleimgurl,
         'vehicleimgid': vehicleimgid,
+        'vehicledistrict': vehicledistrict,
+        'vehicleprovince': vehicleprovince,
+        'vehicleweightcap': vehicleweightcap,
       };
 }

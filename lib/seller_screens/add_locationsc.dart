@@ -43,27 +43,70 @@ class _SelectLocationState extends State<SelectLocation> {
   double loclat = 0.0;
   double loclng = 0.0;
   late SharedPreferences sharedPreferences;
+  Position? _currentPosition;
 
   static const CameraPosition _defaultLocation =
       CameraPosition(target: LatLng(lat, long), zoom: 15);
 
-  Future<Position> _getCurrentLocation() async {
-    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      return Future.error('Location services are disabled');
-    }
+  Future<bool> _handleLocationPermission() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
-    LocationPermission permission = await Geolocator.checkPermission();
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location services are disabled. Please enable the services')));
+      return false;
+    }
+    permission = await Geolocator.checkPermission();
     if (permission == LocationPermission.denied) {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
-        return Future.error('Location permissions are denied');
+        ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Location permissions are denied')));
+        return false;
       }
     }
     if (permission == LocationPermission.deniedForever) {
-      return Future.error('Location permissions denied, we cannot request');
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text(
+              'Location permissions are permanently denied, we cannot request permissions.')));
+      return false;
     }
+    return true;
+  }
+
+  Future<Position> _getCurrentLocation() async {
+    final hasPermission = await _handleLocationPermission();
+
+    if (!hasPermission) {
+      return Future.error('Location services are disabled');
+    }
+    await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high)
+        .then((Position position) {
+      setState(() => _currentPosition = position);
+      return _currentPosition;
+    }).catchError((e) {
+      debugPrint(e);
+    });
     return await Geolocator.getCurrentPosition();
+    // bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    // if (!serviceEnabled) {
+    //   return Future.error('Location services are disabled');
+    // }
+
+    // LocationPermission permission = await Geolocator.checkPermission();
+    // if (permission == LocationPermission.denied) {
+    //   permission = await Geolocator.requestPermission();
+    //   if (permission == LocationPermission.denied) {
+    //     return Future.error('Location permissions are denied');
+    //   }
+    // }
+    // if (permission == LocationPermission.deniedForever) {
+    //   return Future.error('Location permissions denied, we cannot request');
+    // }
+    // return await Geolocator.getCurrentPosition();
   }
 
   // void _liveLocation(){
@@ -92,6 +135,10 @@ class _SelectLocationState extends State<SelectLocation> {
       body: Stack(
         children: <Widget>[
           GoogleMap(
+            onMapCreated: (GoogleMapController controller) {
+              // here save the value
+              googleMapController = controller;
+            },
             initialCameraPosition: _defaultLocation,
             markers: markers,
             onTap: (LatLng latlng) {
@@ -177,16 +224,16 @@ class _SelectLocationState extends State<SelectLocation> {
 
                     markers.clear();
                   } catch (e) {
-                    print('location access naa');
+                    print(e);
                   }
                   setState(() {});
 
-                  // // // _getCurrentLocation().then((value) {
-                  // // //   setState(() {
-                  // // //     lat = value.longitude;
-                  // // //     long = value.longitude;
-                  // // //   });
-                  // // // });
+                  _getCurrentLocation().then((value) {
+                    setState(() {
+                      loclat = value.longitude;
+                      loclng = value.longitude;
+                    });
+                  });
                 },
               )
             ]),

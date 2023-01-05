@@ -23,6 +23,62 @@ class TransporterSignUp extends StatefulWidget {
   State<TransporterSignUp> createState() => _TransporterSignUpState();
 }
 
+const List<String> _Provincelist = <String>[
+  "Western Province",
+  "Central Province",
+  "Eastern Province",
+  "North central Province",
+  "North Province",
+  "Northwest Province",
+  "Sabaragamuwa Province",
+  "South Province",
+  "Uva Province"
+];
+List<String> _Districtlist = <String>[];
+const List<String> _Districtlist1 = <String>[
+  'Colombo District',
+  'Gampaha District',
+  'Kalutara District',
+];
+const List<String> _Districtlist2 = <String>[
+  'Kandy District',
+  'Matale District',
+  'Nuwara Eliya',
+];
+const List<String> _Districtlist3 = <String>[
+  'Batticaloa District',
+  'Ampara District',
+  'Trincomalee District',
+];
+const List<String> _Districtlist4 = <String>[
+  'Anuradhapura District',
+  'Polonnaruwa District',
+];
+const List<String> _Districtlist5 = <String>[
+  'Jaffna District',
+  'Kilinochchi District',
+  'Mannar District',
+  'Vavuniya District',
+  'Mullaitivu District',
+];
+const List<String> _Districtlist6 = <String>[
+  'Kurunegala District',
+  'Puttalam District',
+];
+const List<String> _Districtlist7 = <String>[
+  'Ratnapura District',
+  'Kegalle District',
+];
+const List<String> _Districtlist8 = <String>[
+  'Galle District',
+  'Matara District',
+  'Hambantota District',
+];
+const List<String> _Districtlist9 = <String>[
+  'Badulla District',
+  'Moneragala District',
+];
+
 class _TransporterSignUpState extends State<TransporterSignUp> {
   File? image;
   String verID = " ";
@@ -40,6 +96,8 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
   final TextEditingController _NICNoController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _vehicleNumberController =
+      TextEditingController();
+  final TextEditingController _weightCapacityTextController =
       TextEditingController();
 
   void showSnackBarText(String text) {
@@ -125,6 +183,40 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
             //Enter address text field
             formTextField(
                 "Address", FontAwesomeIcons.house, _AddressController),
+            const SizedBox(
+              height: 20,
+            ),
+            //Weight text field
+            SizedBox(
+              width: 350.0,
+              child: TextField(
+                controller: _weightCapacityTextController,
+                keyboardType: TextInputType.number,
+                obscureText: false,
+                enableSuggestions: true,
+                autocorrect: true,
+                cursorColor: Colors.black45,
+                style: TextStyle(color: Colors.black.withOpacity(0.9)),
+                decoration: InputDecoration(
+                  prefixIcon: const Icon(
+                    Icons.scale,
+                    color: Colors.black45,
+                  ),
+                  suffixText: 'kg',
+                  labelText: "Weight capacity of vehicle",
+                  labelStyle: TextStyle(color: Colors.black.withOpacity(0.6)),
+                  filled: true,
+                  floatingLabelBehavior: FloatingLabelBehavior.never,
+                  fillColor:
+                      const Color.fromARGB(255, 185, 224, 186).withOpacity(0.3),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(30.0),
+                    borderSide:
+                        const BorderSide(width: 0, style: BorderStyle.none),
+                  ),
+                ),
+              ),
+            ),
 
             const SizedBox(
               height: 20,
@@ -259,6 +351,50 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
                 obscureText: passswordvisibe,
               ),
             ),
+            const SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 5, 40, 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Select Your Living Province',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 138, 126, 112),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _getProvince(),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 15, 40, 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Select Your Living District',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 138, 126, 112),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _getDistrict(),
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             SizedBox(
               height: 20,
             ),
@@ -273,6 +409,21 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
                   Text(
                     'Remember this for your future logins',
                     style: TextStyle(color: Colors.orangeAccent),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 15, 40, 5),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text(
+                    'Add an image of your vehicle',
+                    style: TextStyle(
+                        color: Color.fromARGB(255, 138, 126, 112),
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold),
                   ),
                 ],
               ),
@@ -395,6 +546,9 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
                   vehicleNum: _vehicleNumberController.text,
                   vehicletype: vehicleType,
                   image: image!,
+                  vehicledistrict: districtType,
+                  vehicleprovince: provinceType,
+                  vehicleweightcap: _weightCapacityTextController.text,
                 )));
       },
       codeAutoRetrievalTimeout: (String verificationId) {},
@@ -468,5 +622,87 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
     } catch (e) {
       print('Failed to pick image: $e');
     }
+  }
+
+  String provinceType = _Provincelist.first;
+
+  Widget _getProvince() {
+    return Container(
+      width: 350,
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 185, 224, 186).withOpacity(0.3),
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          dropdownColor: const Color.fromARGB(255, 246, 248, 246),
+          value: provinceType,
+          iconSize: 36,
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.black,
+          ),
+          isExpanded: true,
+          items: _Provincelist.map(buildMenuItem).toList(),
+          onChanged: (value) => setState(() => provinceType = value!),
+        ),
+      ),
+    );
+  }
+
+  late String districtType;
+  Widget _getDistrict() {
+    if (provinceType == "Western Province") {
+      _Districtlist = _Districtlist1;
+      districtType = _Districtlist.first;
+    } else if (provinceType == "Central Province") {
+      _Districtlist = _Districtlist2;
+      districtType = _Districtlist.first;
+    } else if (provinceType == "Eastern Province") {
+      _Districtlist = _Districtlist3;
+      districtType = _Districtlist.first;
+    } else if (provinceType == "North central Province") {
+      _Districtlist = _Districtlist4;
+      districtType = _Districtlist.first;
+    } else if (provinceType == "North Province") {
+      _Districtlist = _Districtlist5;
+      districtType = _Districtlist.first;
+    } else if (provinceType == "Northwest Province") {
+      _Districtlist = _Districtlist6;
+      districtType = _Districtlist.first;
+    } else if (provinceType == "Sabaragamuwa Province") {
+      _Districtlist = _Districtlist7;
+      districtType = _Districtlist.first;
+    } else if (provinceType == "South Province") {
+      _Districtlist = _Districtlist8;
+      districtType = _Districtlist.first;
+    } else {
+      _Districtlist = _Districtlist9;
+      districtType = _Districtlist.first;
+    }
+
+    return Container(
+      width: 350,
+      padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+      decoration: BoxDecoration(
+        color: Color.fromARGB(255, 185, 224, 186).withOpacity(0.3),
+        borderRadius: BorderRadius.circular(30.0),
+      ),
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          dropdownColor: Color.fromARGB(255, 246, 248, 246),
+          value: districtType,
+          iconSize: 36,
+          icon: const Icon(
+            Icons.arrow_drop_down,
+            color: Colors.black,
+          ),
+          isExpanded: true,
+          items: _Districtlist.map(buildMenuItem).toList(),
+          onChanged: (value) => setState(() => districtType = value!),
+        ),
+      ),
+    );
   }
 }

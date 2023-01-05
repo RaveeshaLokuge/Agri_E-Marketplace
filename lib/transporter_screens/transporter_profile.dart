@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gpsd_project/screens/home_screen.dart';
+import 'package:gpsd_project/transporter_screens/location_handlingsc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class TransporterProfile extends StatefulWidget {
@@ -26,41 +27,82 @@ class _TransporterProfileState extends State<TransporterProfile> {
               fontWeight: FontWeight.bold),
         ),
       ),
-      body: Container(
-        width: 250,
-        height: 50,
-        margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
-        child: ElevatedButton(
-          onPressed: () async {
-            sharedPreferences = await SharedPreferences.getInstance();
-            await sharedPreferences.clear();
-            Navigator.of(context).pushReplacement(
-              MaterialPageRoute(
-                builder: (context) => HomeScreen(),
+      body: SingleChildScrollView(
+          child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            width: 250,
+            height: 50,
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
+            child: ElevatedButton(
+              onPressed: () async {
+                sharedPreferences = await SharedPreferences.getInstance();
+                await sharedPreferences.clear();
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => HomeScreen(),
+                  ),
+                );
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.pressed)) {
+                    return Color.fromARGB(66, 59, 83, 21);
+                  }
+                  return Color.fromARGB(255, 156, 150, 121);
+                }),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                ),
               ),
-            );
-          },
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.resolveWith((states) {
-              if (states.contains(MaterialState.pressed)) {
-                return Color.fromARGB(66, 59, 83, 21);
-              }
-              return Color.fromARGB(255, 156, 150, 121);
-            }),
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+              child: const Text(
+                'Log out',
+                style: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
             ),
           ),
-          child: const Text(
-            'Log out',
-            style: TextStyle(
-                color: Colors.black87,
-                fontWeight: FontWeight.bold,
-                fontSize: 16),
+          Container(
+            width: 250,
+            height: 50,
+            margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(90)),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (context) => LocationHandling(),
+                  ),
+                );
+              },
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith((states) {
+                  if (states.contains(MaterialState.pressed)) {
+                    return Color.fromARGB(66, 59, 83, 21);
+                  }
+                  return Color.fromARGB(255, 156, 150, 121);
+                }),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30)),
+                ),
+              ),
+              child: const Text(
+                'Set up location settings',
+                style: TextStyle(
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16),
+              ),
+            ),
           ),
-        ),
-      ),
+        ],
+      )),
     );
   }
 }

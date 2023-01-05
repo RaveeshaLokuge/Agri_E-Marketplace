@@ -344,7 +344,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                         village: product.village,
                                         weight: product.weight,
                                         sellerlat: product.latitude,
-                                        sellerlng: product.latitude,
+                                        sellerlng: product.longitude,
                                         productid: product.id,
                                       )));
                         },

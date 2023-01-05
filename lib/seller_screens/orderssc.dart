@@ -157,7 +157,12 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                             context,
                                             MaterialPageRoute(
                                                 builder: (context) =>
-                                                    const SearchTransporter()));
+                                                    SearchTransporter(
+                                                      sellerlat:
+                                                          order.sellerlat,
+                                                      sellerlng:
+                                                          order.sellerlng,
+                                                    )));
                                         //select transporter
                                       } else {
                                         if (order.transporteraccepted ==
@@ -225,6 +230,8 @@ class Order {
   final bool transporteraccepted;
   final bool shipped;
   final bool completed;
+  final double sellerlat;
+  final double sellerlng;
 
   Order({
     required this.title,
@@ -237,6 +244,8 @@ class Order {
     required this.transporteraccepted,
     required this.shipped,
     required this.completed,
+    required this.sellerlat,
+    required this.sellerlng,
   });
 
   Order.fromJson(Map<String, Object?> json)
@@ -251,6 +260,8 @@ class Order {
           transporteraccepted: json['transporteraccepted']! as bool,
           shipped: json['shipped']! as bool,
           completed: json['completed']! as bool,
+          sellerlat: json['sellerlat']! as double,
+          sellerlng: json['sellerlng']! as double,
         );
   Map<String, dynamic> toJson() => {
         'title': title,
@@ -263,5 +274,7 @@ class Order {
         'transporteraccepted': transporteraccepted,
         'shipped': shipped,
         'completed': completed,
+        'sellerlat': sellerlat,
+        'sellerlng': sellerlng,
       };
 }

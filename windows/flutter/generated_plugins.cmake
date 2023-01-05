@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   desktop_webview_auth
   geolocator_windows
+  permission_handler_windows
   smart_auth
 )
 
