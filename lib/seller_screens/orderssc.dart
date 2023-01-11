@@ -162,11 +162,24 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                                           order.sellerlat,
                                                       sellerlng:
                                                           order.sellerlng,
+                                                      orderid: order.id,
+                                                      logedusername:
+                                                          widget.logedusername,
                                                     )));
                                         //select transporter
                                       } else {
                                         if (order.transporteraccepted ==
                                             false) {
+                                          final docOrder = FirebaseFirestore
+                                              .instance
+                                              .collection('Order_Details')
+                                              .doc(order.id);
+                                          docOrder.update({
+                                            'transporterselected': false,
+                                            'transportername': '',
+                                            'transporterid': '',
+                                            'transporterusername': '',
+                                          });
                                           //cancel request
                                         } else {
                                           if (order.shipped == false) {

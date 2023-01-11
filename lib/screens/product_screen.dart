@@ -328,6 +328,11 @@ class _ProductScreenState extends State<ProductScreen> {
                           ),
                         ),
                         onPressed: () async {
+                          // if (condition) {
+
+                          // } else {
+
+                          // }
                           Navigator.push(
                               context,
                               MaterialPageRoute(

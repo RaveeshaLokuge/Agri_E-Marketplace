@@ -2,19 +2,24 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import 'dart:math' as Math;
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 
 import 'package:geolocator/geolocator.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:gpsd_project/transporter_screens/transporter_otpscreen.dart';
+import 'package:gpsd_project/seller_screens/orderssc.dart';
 
 class SearchTransporter extends StatefulWidget {
   final double sellerlat;
   final double sellerlng;
+  final String orderid;
+  final String logedusername;
   const SearchTransporter(
-      {super.key, required this.sellerlat, required this.sellerlng});
+      {super.key,
+      required this.sellerlat,
+      required this.sellerlng,
+      required this.orderid,
+      required this.logedusername});
 
   @override
   State<SearchTransporter> createState() => _SearchTransporterState();
@@ -33,13 +38,82 @@ class _SearchTransporterState extends State<SearchTransporter> {
   double distance1 = 0.0;
   double distance2 = 1000000000;
   late String selectedtransporter;
+  late String selectedtransporterid;
 
-  Widget buildResult(String transporter) => SingleChildScrollView(
+  Widget buildtrasporter(Transporter transporter) => SingleChildScrollView(
         child: Column(
-          children: [
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
             Container(
-              child: Text(transporter),
-            )
+              width: 350,
+              child: Image(
+                image: NetworkImage(transporter.vehicleimgurl),
+              ),
+            ),
+            Container(
+              width: 250,
+              height: 50,
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(90)),
+              child: ElevatedButton(
+                onPressed: () {
+                  final docOrder = FirebaseFirestore.instance
+                      .collection('Order_Details')
+                      .doc(widget.orderid);
+                  final doctransporter = FirebaseFirestore.instance
+                      .collection('users')
+                      .doc(transporter.transporterid);
+                  docOrder.update({
+                    'transporterselected': true,
+                    'transportername': transporter.name,
+                    'transporterid': transporter.transporterid,
+                    'transporterusername': transporter.transporterusername,
+                  });
+
+                  doctransporter.update({
+                    'available': false,
+                  });
+
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => OrdersScreen(
+                              logedusername: widget.logedusername)));
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Color.fromARGB(66, 59, 83, 21);
+                    }
+                    return Color.fromARGB(255, 156, 150, 121);
+                  }),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                  ),
+                ),
+                child: const Text(
+                  'Continue',
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 20, 40, 25),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text(
+                    transporter.transporterusername,
+                    style: TextStyle(color: Color.fromARGB(255, 150, 99, 34)),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       );
@@ -51,10 +125,11 @@ class _SearchTransporterState extends State<SearchTransporter> {
     return 12742 * asin(sqrt(a));
   }
 
-  Future<String> getNearestTransporter() async {
+  Future<Transporter?> getNearestTransporter() async {
     QuerySnapshot snap = await FirebaseFirestore.instance
         .collection('users')
         .where('type', isEqualTo: 'T')
+        .where('available', isEqualTo: true)
         .get();
 
     int numberoftransporters = snap.size;
@@ -103,11 +178,19 @@ class _SearchTransporterState extends State<SearchTransporter> {
       if (distance1 < distance2) {
         distance2 = distance;
         selectedtransporter = snap.docs[i]['username'];
+        selectedtransporterid = snap.docs[i]['id'];
         print(distance2);
       }
     }
 
-    return selectedtransporter;
+    final docTransporter = FirebaseFirestore.instance
+        .collection('users')
+        .doc(selectedtransporterid);
+    final snapshot = await docTransporter.get();
+
+    if (snapshot.exists) {
+      return Transporter.fromJson(snapshot.data()!);
+    }
   }
 
   @override
@@ -117,25 +200,54 @@ class _SearchTransporterState extends State<SearchTransporter> {
         title: Text("Calculate Distance in Google Map"),
         backgroundColor: Colors.deepPurpleAccent,
       ),
-      body: FutureBuilder(
-          future: getNearestTransporter(),
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            if (snapshot.hasData) {
-              final transporter = snapshot.data;
-              return buildResult(transporter!);
-
-              // Container(
-              //   child: Text(transporter!),
-              // );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(),
-              );
-            }
-          }),
+      body: FutureBuilder<Transporter?>(
+        future: getNearestTransporter(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final transporter = snapshot.data;
+            return buildtrasporter(transporter!);
+          } else {
+            return const Center(
+              child: CircularProgressIndicator.adaptive(),
+            );
+          }
+        },
+      ),
     );
   }
+}
 
+class Transporter {
+  final String name;
+  final String phoneno;
+  final String vehicleimgurl;
+  final String transporterusername;
+  final String transporterid;
+
+  Transporter({
+    required this.name,
+    required this.phoneno,
+    required this.vehicleimgurl,
+    required this.transporterusername,
+    required this.transporterid,
+  });
+
+  Transporter.fromJson(Map<String, Object?> json)
+      : this(
+          name: json['name']! as String,
+          phoneno: json['phoneno']! as String,
+          vehicleimgurl: json['vehicleimgurl']! as String,
+          transporterusername: json['username']! as String,
+          transporterid: json['id']! as String,
+        );
+  Map<String, dynamic> toJson() => {
+        'name': name,
+        'phoneno': phoneno,
+        'vehicleimgurl': vehicleimgurl,
+        'username': transporterusername,
+        'id': transporterid,
+      };
+}
   // @override
   // void initState() {
   //   getDirections(); //fetch direction polylines from Google API
@@ -294,7 +406,7 @@ class _SearchTransporterState extends State<SearchTransporter> {
   // double deg2rad(deg) {
   //   return deg * (Math.pi / 180);
   // }
-}
+
 
 //   // get Current Location
 //   _getCurrentLocation() {

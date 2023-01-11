@@ -138,60 +138,70 @@ class _SelectLocationBuyingState extends State<SelectLocationBuying> {
                 ),
                 child: Text('Add Location'),
                 onPressed: () async {
-                  sharedPreferences = await SharedPreferences.getInstance();
-                  username = sharedPreferences.getString('username')!;
-                  if (widget.sellerusername == username) {
-                    showDialog(
-                        context: context,
-                        builder: (context) => const AlertDialog(
-                              title: Text("You cannot buy your own products"),
-                            ));
-                  } else {
-                    if (loclat == 0.0 || loclng == 0.0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content:
-                              Text("Please select your location to deliver"),
-                        ),
-                      );
+                  try {
+                    sharedPreferences = await SharedPreferences.getInstance();
+                    username = sharedPreferences.getString('username')!;
+                    if (widget.sellerusername == username) {
+                      showDialog(
+                          context: context,
+                          builder: (context) => const AlertDialog(
+                                title: Text("You cannot buy your own products"),
+                              ));
                     } else {
-                      sharedPreferences = await SharedPreferences.getInstance();
-                      username = sharedPreferences.getString('username')!;
-                      final order = Order_Details(
-                        productid: widget.productid,
-                        buyerid: username,
-                        sellerusername: widget.sellerusername,
-                        buyerlat: loclat,
-                        buyerlng: loclng,
-                        district: widget.district,
-                        id1: widget.id1,
-                        imgUrl1: widget.imgUrl1,
-                        price: widget.price,
-                        productdocid: widget.productdocid,
-                        productname: widget.productname,
-                        province: widget.province,
-                        sellerlat: widget.sellerlat,
-                        sellerlng: widget.sellerlng,
-                        title: widget.title,
-                        village: widget.village,
-                        weight: widget.weight,
-                      );
-                      createOrder(order: order);
-                      // navigating to product listing page
+                      if (loclat == 0.0 || loclng == 0.0) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content:
+                                Text("Please select your location to deliver"),
+                          ),
+                        );
+                      } else {
+                        sharedPreferences =
+                            await SharedPreferences.getInstance();
+                        username = sharedPreferences.getString('username')!;
+                        final order = Order_Details(
+                          productid: widget.productid,
+                          buyerid: username,
+                          sellerusername: widget.sellerusername,
+                          buyerlat: loclat,
+                          buyerlng: loclng,
+                          district: widget.district,
+                          id1: widget.id1,
+                          imgUrl1: widget.imgUrl1,
+                          price: widget.price,
+                          productdocid: widget.productdocid,
+                          productname: widget.productname,
+                          province: widget.province,
+                          sellerlat: widget.sellerlat,
+                          sellerlng: widget.sellerlng,
+                          title: widget.title,
+                          village: widget.village,
+                          weight: widget.weight,
+                        );
+                        createOrder(order: order);
+                        // navigating to product listing page
 
-                      final docProduct = FirebaseFirestore.instance
-                          .collection('Product_Data')
-                          .doc(widget.productdocid);
+                        final docProduct = FirebaseFirestore.instance
+                            .collection('Product_Data')
+                            .doc(widget.productdocid);
 
-                      docProduct.update({
-                        'sold': true,
-                      });
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomeScreen(),
-                          ));
+                        docProduct.update({
+                          'sold': true,
+                        });
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const HomeScreen(),
+                            ));
+                      }
                     }
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content:
+                            Text("Please Sign on or Register before buying"),
+                      ),
+                    );
                   }
                 },
               )

@@ -227,6 +227,7 @@ class _transporterOTPState extends State<transporterOTP> {
 class User {
   String id;
   String type;
+  bool available;
   final String name;
   final String username;
   final String nic;
@@ -244,6 +245,7 @@ class User {
   User({
     this.id = '',
     this.type = 'T',
+    this.available = true,
     required this.name,
     required this.username,
     required this.nic,
@@ -261,6 +263,7 @@ class User {
   Map<String, dynamic> toJson() => {
         'id': id,
         'type': type,
+        'available': available,
         'name': name,
         'username': username,
         'nic': nic,

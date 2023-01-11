@@ -62,7 +62,7 @@ class _HomeScreenState extends State<HomeScreen> {
           leading: IconButton(
             onPressed: () async {
               sharedPreferences = await SharedPreferences.getInstance();
-
+              // await sharedPreferences.clear();
               if (sharedPreferences.getString('username') != null) {
                 QuerySnapshot snap = await FirebaseFirestore.instance
                     .collection("users")
