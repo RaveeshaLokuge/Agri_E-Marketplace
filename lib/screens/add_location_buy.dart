@@ -7,6 +7,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:gpsd_project/screens/home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:confirm_dialog/confirm_dialog.dart';
 
 class SelectLocationBuying extends StatefulWidget {
   final String sellerusername;
@@ -156,43 +157,53 @@ class _SelectLocationBuyingState extends State<SelectLocationBuying> {
                           ),
                         );
                       } else {
-                        sharedPreferences =
-                            await SharedPreferences.getInstance();
-                        username = sharedPreferences.getString('username')!;
-                        final order = Order_Details(
-                          productid: widget.productid,
-                          buyerid: username,
-                          sellerusername: widget.sellerusername,
-                          buyerlat: loclat,
-                          buyerlng: loclng,
-                          district: widget.district,
-                          id1: widget.id1,
-                          imgUrl1: widget.imgUrl1,
-                          price: widget.price,
-                          productdocid: widget.productdocid,
-                          productname: widget.productname,
-                          province: widget.province,
-                          sellerlat: widget.sellerlat,
-                          sellerlng: widget.sellerlng,
-                          title: widget.title,
-                          village: widget.village,
-                          weight: widget.weight,
-                        );
-                        createOrder(order: order);
-                        // navigating to product listing page
+                        if (await confirm(
+                          context,
+                          title: const Text('Confirm'),
+                          content: const Text('Would you like to buy?'),
+                          textOK: const Text('Yes'),
+                          textCancel: const Text('No'),
+                        )) {
+                          sharedPreferences =
+                              await SharedPreferences.getInstance();
+                          username = sharedPreferences.getString('username')!;
+                          final order = Order_Details(
+                            productid: widget.productid,
+                            buyerid: username,
+                            sellerusername: widget.sellerusername,
+                            buyerlat: loclat,
+                            buyerlng: loclng,
+                            district: widget.district,
+                            id1: widget.id1,
+                            imgUrl1: widget.imgUrl1,
+                            price: widget.price,
+                            productdocid: widget.productdocid,
+                            productname: widget.productname,
+                            province: widget.province,
+                            sellerlat: widget.sellerlat,
+                            sellerlng: widget.sellerlng,
+                            title: widget.title,
+                            village: widget.village,
+                            weight: widget.weight,
+                          );
+                          createOrder(order: order);
+                          // navigating to product listing page
 
-                        final docProduct = FirebaseFirestore.instance
-                            .collection('Product_Data')
-                            .doc(widget.productdocid);
+                          final docProduct = FirebaseFirestore.instance
+                              .collection('Product_Data')
+                              .doc(widget.productdocid);
 
-                        docProduct.update({
-                          'sold': true,
-                        });
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const HomeScreen(),
-                            ));
+                          docProduct.update({
+                            'sold': true,
+                          });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const HomeScreen(),
+                              ));
+                        } else {
+                          return print('pressedCancel');
+                        }
                       }
                     }
                   } catch (e) {
@@ -267,6 +278,7 @@ class Order_Details {
   final String province;
   final String district;
   final String village;
+  final String transporterid;
   final double sellerlat;
   final double sellerlng;
   final String id1;
@@ -280,8 +292,9 @@ class Order_Details {
     this.id = '',
     this.transporterselected = false,
     this.transporteraccepted = false,
-    this.shipped = true,
+    this.shipped = false,
     this.completed = false,
+    this.transporterid = '',
     required this.productdocid,
     required this.productid,
     required this.buyerid,
@@ -302,6 +315,7 @@ class Order_Details {
   });
   Map<String, dynamic> toJson() => {
         'id': id,
+        'transporterid': transporterid,
         'transporterselected': transporterselected,
         'transporteraccepted': transporteraccepted,
         'shipped': shipped,

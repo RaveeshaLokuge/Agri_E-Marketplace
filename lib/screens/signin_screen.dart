@@ -131,19 +131,6 @@ class _LoginpageState extends State<Loginpage> {
                           obscureText: passswordvisibe,
                         ),
                       ),
-
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20, 20, 40, 25),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: const [
-                            Text(
-                              'Forget Password',
-                              style: TextStyle(color: Colors.orangeAccent),
-                            ),
-                          ],
-                        ),
-                      ),
                       Container(
                         width: 250,
                         height: 50,
@@ -206,6 +193,7 @@ class _LoginpageState extends State<Loginpage> {
                                   );
                                 }
                               } catch (e) {
+                                print(e);
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text("User name does not exist"),

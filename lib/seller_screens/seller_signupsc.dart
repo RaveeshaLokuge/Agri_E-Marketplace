@@ -228,7 +228,7 @@ class _SellerSignUpState extends State<SellerSignUp> {
                   FocusScope.of(context).unfocus();
                   String? usrename = _userNameTextController.text.trim();
                   QuerySnapshot snap = await FirebaseFirestore.instance
-                      .collection("buyer")
+                      .collection("users")
                       .where('username', isEqualTo: usrename)
                       .get();
                   try {

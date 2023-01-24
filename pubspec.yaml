@@ -60,6 +60,7 @@ dependencies:
   location: ^4.4.0
   flutter_polyline_points: ^1.0.0
   url_launcher: ^6.1.7
+  confirm_dialog: ^1.0.1
 
   
 

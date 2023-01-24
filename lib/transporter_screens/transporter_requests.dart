@@ -15,6 +15,7 @@ class TransporterRequests extends StatefulWidget {
 class _TransporterRequestsState extends State<TransporterRequests> {
   bool isLoading = false;
   bool isAccepted = false;
+
   Query<Order> transporterOrderQuery() {
     FirebaseStorage storage = FirebaseStorage.instance;
     final queryPost = FirebaseFirestore.instance
@@ -25,7 +26,6 @@ class _TransporterRequestsState extends State<TransporterRequests> {
             toFirestore: (user, _) => user.toJson());
 
     // .where('shipped', isEqualTo: false)
-
     return queryPost;
   }
 
@@ -49,7 +49,22 @@ class _TransporterRequestsState extends State<TransporterRequests> {
           shrinkWrap: true,
           primary: false,
           itemBuilder: (context, snapshot) {
+            late String buttontext;
             final order = snapshot.data();
+            if (order.transporteraccepted == false) {
+              buttontext = 'Accept';
+              //accepting the order
+            } else {
+              if (order.shipped == false) {
+                buttontext = 'Mark as picked up';
+                //navigating to seller
+              } else {
+                buttontext = 'Mark as completed';
+                //navigate to buyer
+
+              }
+            }
+
             return Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
                 child: Column(children: [
@@ -111,43 +126,191 @@ class _TransporterRequestsState extends State<TransporterRequests> {
                               )
                             ],
                           ),
-                          Container(
-                            width: 250,
-                            height: 50,
-                            margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
-                            decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(90)),
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                backgroundColor:
-                                    MaterialStateProperty.resolveWith((states) {
-                                  if (states.contains(MaterialState.pressed)) {
-                                    return Color.fromARGB(66, 59, 83, 21);
-                                  }
-                                  return Color.fromARGB(255, 156, 150, 121);
-                                }),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(30)),
+                          Visibility(
+                            maintainSize: true,
+                            maintainAnimation: true,
+                            maintainState: true,
+                            visible: !order.completed,
+                            child: Container(
+                              width: 250,
+                              height: 30,
+                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(90)),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith(
+                                          (states) {
+                                    if (states
+                                        .contains(MaterialState.pressed)) {
+                                      return Color.fromARGB(66, 59, 83, 21);
+                                    }
+                                    return Color.fromARGB(255, 156, 150, 121);
+                                  }),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                  ),
                                 ),
+                                child: Text(buttontext),
+                                onPressed: () async {
+                                  final docOrder = FirebaseFirestore.instance
+                                      .collection('Order_Details')
+                                      .doc(order.id);
+                                  if (order.transporteraccepted == false) {
+                                    docOrder.update({
+                                      'transporteraccepted': true,
+                                    });
+                                    setState(() {});
+                                    //accepting the order
+                                  } else {
+                                    if (order.shipped == false) {
+                                      docOrder.update({
+                                        'shipped': true,
+                                      });
+                                      setState(() {});
+                                      //navigating to seller
+                                    } else {
+                                      if (order.shipped == false) {
+                                        docOrder.update({
+                                          'completed': true,
+                                        });
+                                        setState(() {});
+                                        //navigate to buyer
+                                      }
+                                    }
+                                  }
+                                  //             QuerySnapshot snap = await FirebaseFirestore.instance
+                                  // .collection("users")
+                                  // .where('username',
+                                  //     isEqualTo: widget.logedusername)
+                                  // .get();
+                                  // if (order.transporteraccepted) {
+                                  //   Navigator.of(context).pushReplacement(
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) =>
+                                  //             NavigationScreen(order.sellerlat,
+                                  //                 order.sellerlng)),
+                                  //   );
+                                  // } else {
+                                  //   final docOrder = FirebaseFirestore.instance
+                                  //       .collection('Order_Details')
+                                  //       .doc(order.id);
+
+                                  //   docOrder.update({
+                                  //     'transporteraccepted': true,
+                                  //   });
+                                  //   setState(() {});
+                                  // }
+                                },
                               ),
-                              child: isAccepted
-                                  ? Text('Get Location')
-                                  : Text('Accept'),
-                              onPressed: () async {
-                                if (isAccepted) {
-                                  Navigator.of(context).pushReplacement(
-                                    MaterialPageRoute(
-                                        builder: (context) => NavigationScreen(
-                                            order.sellerlat, order.sellerlng)),
-                                  );
-                                } else {
-                                  setState(
-                                    () => isAccepted = true,
-                                  );
-                                }
-                              },
+                            ),
+                          ),
+
+                          // second button//////////
+                          Visibility(
+                            maintainSize: true,
+                            maintainAnimation: true,
+                            maintainState: true,
+                            visible: !order.completed,
+                            child: Container(
+                              width: 250,
+                              height: 30,
+                              margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(90)),
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.resolveWith(
+                                          (states) {
+                                    if (states
+                                        .contains(MaterialState.pressed)) {
+                                      return Color.fromARGB(66, 59, 83, 21);
+                                    }
+                                    return Color.fromARGB(255, 156, 150, 121);
+                                  }),
+                                  shape: MaterialStateProperty.all<
+                                      RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(30)),
+                                  ),
+                                ),
+                                child: order.transporteraccepted
+                                    ? Text('Get Directions')
+                                    : Text('Cancel'),
+                                onPressed: () async {
+                                  if (order.transporteraccepted == false) {
+                                    final docTransporter = FirebaseFirestore
+                                        .instance
+                                        .collection('users')
+                                        .doc(order.transporterid);
+
+                                    docTransporter.update({
+                                      'available': true,
+                                    });
+
+                                    final docOrder = FirebaseFirestore.instance
+                                        .collection('Order_Details')
+                                        .doc(order.id);
+
+                                    docOrder.update({
+                                      'transporterselected': false,
+                                      'transportername': '',
+                                      'transporterid': '',
+                                      'transporterusername': '',
+                                    });
+                                    setState(() {});
+                                    //canceling the order
+                                  } else {
+                                    if (order.shipped == false) {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  NavigationScreen(
+                                                      order.sellerlat,
+                                                      order.sellerlng)));
+                                      //navigating to seller
+                                    } else {
+                                      Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  NavigationScreen(
+                                                      order.buyerlat,
+                                                      order.buyerlng)));
+                                      //navigate to buyer
+                                    }
+                                  }
+
+                                  // //             QuerySnapshot snap = await FirebaseFirestore.instance
+                                  // // .collection("users")
+                                  // // .where('username',
+                                  // //     isEqualTo: widget.logedusername)
+                                  // // .get();
+                                  // if (order.transporteraccepted) {
+                                  //   Navigator.of(context).pushReplacement(
+                                  //     MaterialPageRoute(
+                                  //         builder: (context) => NavigationScreen(
+                                  //             order.sellerlat, order.sellerlng)),
+                                  //   );
+                                  // } else {
+                                  //   final docOrder = FirebaseFirestore.instance
+                                  //       .collection('Order_Details')
+                                  //       .doc(order.id);
+
+                                  //   docOrder.update({
+                                  //     'transporteraccepted': true,
+                                  //   });
+                                  //   setState(() {});
+                                  // }
+                                },
+                              ),
                             ),
                           ),
                         ]),
@@ -216,22 +379,30 @@ class Order {
   final String weight;
   final String id1;
   final String id;
+  final String transporterid;
   final String imgUrl1;
   final double sellerlat;
   final double sellerlng;
   final double buyerlat;
   final double buyerlng;
+  final bool transporteraccepted;
+  final bool shipped;
+  final bool completed;
 
   Order({
     required this.title,
     required this.weight,
     required this.id1,
     required this.id,
+    required this.transporterid,
     required this.imgUrl1,
     required this.sellerlat,
     required this.sellerlng,
     required this.buyerlat,
     required this.buyerlng,
+    required this.transporteraccepted,
+    required this.completed,
+    required this.shipped,
   });
 
   Order.fromJson(Map<String, Object?> json)
@@ -240,21 +411,29 @@ class Order {
           weight: json['weight']! as String,
           id1: json['id1']! as String,
           id: json['id']! as String,
+          transporterid: json['transporterid']! as String,
           imgUrl1: json['imgUrl1']! as String,
           sellerlat: json['sellerlat']! as double,
           sellerlng: json['sellerlng']! as double,
           buyerlat: json['buyerlat']! as double,
           buyerlng: json['buyerlng']! as double,
+          transporteraccepted: json['transporteraccepted']! as bool,
+          shipped: json['shipped']! as bool,
+          completed: json['completed']! as bool,
         );
   Map<String, dynamic> toJson() => {
         'title': title,
         'weight': weight,
         'id1': id1,
         'id': id,
+        'transporterid': transporterid,
         'imgUrl1': imgUrl1,
         'sellerlat': sellerlat,
         'sellerlng': sellerlng,
         'buyerlat': sellerlat,
         'buyerlng': buyerlng,
+        'transporteraccepted': transporteraccepted,
+        'shipped': shipped,
+        'completed': completed,
       };
 }

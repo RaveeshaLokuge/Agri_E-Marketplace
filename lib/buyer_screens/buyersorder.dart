@@ -20,6 +20,7 @@ class _BuyerOrdersScreenState extends State<BuyerOrdersScreen> {
 
   Query<Order> createQuery() {
     FirebaseStorage storage = FirebaseStorage.instance;
+
     final queryPost = FirebaseFirestore.instance
         .collection('Order_Details')
         .where('buyerid', isEqualTo: widget.logedusername)
@@ -51,6 +52,23 @@ class _BuyerOrdersScreenState extends State<BuyerOrdersScreen> {
             primary: false,
             itemBuilder: (context, snapshot) {
               final product = snapshot.data();
+              late String texta;
+
+              if (product.transporteraccepted == false) {
+                texta = 'Waiting for a transporter';
+                //accepting the order
+              } else {
+                if (product.shipped == false) {
+                  texta = 'Waiting for transporter pickup';
+                  //navigating to seller
+                } else {
+                  if (product.completed == false) {
+                    texta = 'Your order is on the way';
+                  } else {
+                    texta = 'Order completed';
+                  }
+                }
+              }
 
               return Padding(
                 padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
@@ -60,7 +78,7 @@ class _BuyerOrdersScreenState extends State<BuyerOrdersScreen> {
                         padding: EdgeInsets.symmetric(vertical: 10),
                         child: Container(
                           width: 350,
-                          height: 250,
+                          height: 200,
                           decoration: BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
@@ -79,7 +97,10 @@ class _BuyerOrdersScreenState extends State<BuyerOrdersScreen> {
                               Text(
                                 product.title,
                                 textAlign: TextAlign.center,
-                                style: TextStyle(color: Colors.black54),
+                                style: const TextStyle(
+                                    color: Color.fromARGB(248, 23, 109, 41),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15),
                                 textScaleFactor: 1.2,
                               ),
                               Row(children: [
@@ -94,13 +115,13 @@ class _BuyerOrdersScreenState extends State<BuyerOrdersScreen> {
                                 Column(
                                   children: [
                                     Text(
-                                      product.price,
+                                      'Rs. ${product.price}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(color: Colors.black54),
                                       textScaleFactor: 1.2,
                                     ),
                                     Text(
-                                      product.weight,
+                                      '${product.weight} kg',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(color: Colors.black54),
                                       textScaleFactor: 1.2,
@@ -108,76 +129,16 @@ class _BuyerOrdersScreenState extends State<BuyerOrdersScreen> {
                                   ],
                                 )
                               ]),
-                              Container(
-                                width: 150,
-                                height: 30,
-                                margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(90)),
-                                child: ElevatedButton(
-                                  onPressed: () async {},
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.resolveWith(
-                                            (states) {
-                                      if (states
-                                          .contains(MaterialState.pressed)) {
-                                        return const Color.fromARGB(
-                                            66, 59, 83, 21);
-                                      }
-                                      return const Color.fromARGB(
-                                          255, 156, 150, 121);
-                                    }),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Orders',
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                ),
+                              const SizedBox(
+                                height: 10,
                               ),
-                              Container(
-                                width: 150,
-                                height: 30,
-                                margin: const EdgeInsets.fromLTRB(10, 5, 0, 5),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(90)),
-                                child: ElevatedButton(
-                                  onPressed: () async {},
-                                  style: ButtonStyle(
-                                    backgroundColor:
-                                        MaterialStateProperty.resolveWith(
-                                            (states) {
-                                      if (states
-                                          .contains(MaterialState.pressed)) {
-                                        return Color.fromARGB(66, 59, 83, 21);
-                                      }
-                                      return Color.fromARGB(255, 156, 150, 121);
-                                    }),
-                                    shape: MaterialStateProperty.all<
-                                        RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30)),
-                                    ),
-                                  ),
-                                  child: const Text(
-                                    'Orders',
-                                    style: TextStyle(
-                                        color: Colors.black87,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 16),
-                                  ),
-                                ),
-                              ),
+                              Text(
+                                texta,
+                                style: const TextStyle(
+                                    color: Color.fromARGB(248, 23, 109, 41),
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15),
+                              )
                             ]),
                           ),
                         ))

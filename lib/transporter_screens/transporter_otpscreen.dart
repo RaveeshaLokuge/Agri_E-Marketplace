@@ -19,7 +19,7 @@ class transporterOTP extends StatefulWidget {
   final String address;
   final String password;
   final String vehicleNum;
-  final String vehicletype;
+  // final String vehicletype;
   final String vehicledistrict;
   final String vehicleprovince;
   final String vehicleweightcap;
@@ -35,7 +35,7 @@ class transporterOTP extends StatefulWidget {
     required this.password,
     required this.name,
     required this.vehicleNum,
-    required this.vehicletype,
+    // required this.vehicletype,
     required this.image,
     required this.vehicledistrict,
     required this.vehicleprovince,
@@ -208,7 +208,7 @@ class _transporterOTPState extends State<transporterOTP> {
         address: widget.address,
         password: widget.password,
         vehicleNumber: widget.vehicleNum,
-        vehicleType: widget.vehicletype,
+        // vehicleType: widget.vehicletype,
         vehicleimgurl: vehicleimgurl,
         vehicleimgid: vehicleimgid,
         vehicledistrict: widget.vehicledistrict,
@@ -235,7 +235,7 @@ class User {
   final String address;
   final String password;
   final String vehicleNumber;
-  final String vehicleType;
+  // final String vehicleType;
   final String vehicleimgurl;
   final String vehicleimgid;
   final String vehicledistrict;
@@ -253,7 +253,7 @@ class User {
     required this.address,
     required this.password,
     required this.vehicleNumber,
-    required this.vehicleType,
+    // required this.vehicleType,
     required this.vehicleimgurl,
     required this.vehicleimgid,
     required this.vehicledistrict,
@@ -270,7 +270,7 @@ class User {
         'phoneno': phoneno,
         'address': address,
         'password': password,
-        'vehicleType': vehicleType,
+        // 'vehicleType': vehicleType,
         'vehicleNum': vehicleNumber,
         'vehicleimgurl': vehicleimgurl,
         'vehicleimgid': vehicleimgid,

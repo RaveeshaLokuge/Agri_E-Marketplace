@@ -71,6 +71,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     text = 'contact transporter';
                     text2 = 'transporter will come';
                     // contact transporter
+                  } else {
+                    text = 'order shipped';
+                    text2 = 'order shipped';
                   }
                 }
               }
@@ -142,7 +145,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                 maintainSize: true,
                                 maintainAnimation: true,
                                 maintainState: true,
-                                visible: order.shipped,
+                                visible: !order.shipped,
                                 child: Container(
                                   width: 250,
                                   height: 30,
@@ -170,6 +173,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
                                       } else {
                                         if (order.transporteraccepted ==
                                             false) {
+                                          final docTransporter =
+                                              FirebaseFirestore.instance
+                                                  .collection('users')
+                                                  .doc(order.transporterid);
+
+                                          docTransporter.update({
+                                            'available': true,
+                                          });
                                           final docOrder = FirebaseFirestore
                                               .instance
                                               .collection('Order_Details')
@@ -239,6 +250,7 @@ class Order {
   final String id1;
   final String id;
   final String imgUrl1;
+  final String transporterid;
   final bool transporterselected;
   final bool transporteraccepted;
   final bool shipped;
@@ -253,6 +265,7 @@ class Order {
     required this.id1,
     required this.id,
     required this.imgUrl1,
+    required this.transporterid,
     required this.transporterselected,
     required this.transporteraccepted,
     required this.shipped,
@@ -269,6 +282,7 @@ class Order {
           id1: json['id1']! as String,
           id: json['id']! as String,
           imgUrl1: json['imgUrl1']! as String,
+          transporterid: json['transporterid']! as String,
           transporterselected: json['transporterselected']! as bool,
           transporteraccepted: json['transporteraccepted']! as bool,
           shipped: json['shipped']! as bool,
@@ -283,6 +297,7 @@ class Order {
         'id1': id1,
         'id': id,
         'imgUrl1': imgUrl1,
+        'transporterid': transporterid,
         'transporterselected': transporterselected,
         'transporteraccepted': transporteraccepted,
         'shipped': shipped,

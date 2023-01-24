@@ -32,6 +32,37 @@ class _LocationHandlingState extends State<LocationHandling> {
       body: Container(
         child: Column(
           children: [
+            Container(
+              width: 250,
+              height: 50,
+              margin: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+              decoration:
+                  BoxDecoration(borderRadius: BorderRadius.circular(90)),
+              child: ElevatedButton(
+                onPressed: () async {
+                  _listenLocation();
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.resolveWith((states) {
+                    if (states.contains(MaterialState.pressed)) {
+                      return Color.fromARGB(66, 59, 83, 21);
+                    }
+                    return Color.fromARGB(255, 156, 150, 121);
+                  }),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)),
+                  ),
+                ),
+                child: const Text(
+                  'Enable Location Tracking',
+                  style: TextStyle(
+                      color: Colors.black87,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16),
+                ),
+              ),
+            ),
             TextButton(
                 onPressed: () async {
                   _listenLocation();

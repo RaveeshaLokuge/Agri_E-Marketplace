@@ -228,47 +228,47 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
               height: 20,
             ),
 
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 5, 40, 5),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Text(
-                    'Select Your Vehical Type',
-                    style: TextStyle(
-                        color: Color.fromARGB(255, 83, 77, 69),
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ),
+            // Padding(
+            //   padding: const EdgeInsets.fromLTRB(20, 5, 40, 5),
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     children: const [
+            //       Text(
+            //         'Select Your Vehical Type',
+            //         style: TextStyle(
+            //             color: Color.fromARGB(255, 83, 77, 69),
+            //             fontSize: 20,
+            //             fontWeight: FontWeight.bold),
+            //       ),
+            //     ],
+            //   ),
+            // ),
 
-            //Dropdown menu
-            Container(
-                width: 350,
-                padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
-                decoration: BoxDecoration(
-                  color: Color.fromARGB(255, 185, 224, 186).withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(30.0),
-                ),
-                child: DropdownButtonHideUnderline(
-                  child: DropdownButton<String>(
-                    dropdownColor: Color.fromARGB(255, 246, 248, 246),
-                    value: vehicleType,
-                    iconSize: 36,
-                    icon: const Icon(
-                      Icons.arrow_drop_down,
-                      color: Colors.black,
-                    ),
-                    isExpanded: true,
-                    items: vehicle.map(buildMenuItem).toList(),
-                    onChanged: (value) => setState(() => vehicleType = value!),
-                  ),
-                )),
-            const SizedBox(
-              height: 20,
-            ),
+            // //Dropdown menu
+            // Container(
+            //     width: 350,
+            //     padding: EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            //     decoration: BoxDecoration(
+            //       color: Color.fromARGB(255, 185, 224, 186).withOpacity(0.3),
+            //       borderRadius: BorderRadius.circular(30.0),
+            //     ),
+            //     child: DropdownButtonHideUnderline(
+            //       child: DropdownButton<String>(
+            //         dropdownColor: Color.fromARGB(255, 246, 248, 246),
+            //         value: vehicleType,
+            //         iconSize: 36,
+            //         icon: const Icon(
+            //           Icons.arrow_drop_down,
+            //           color: Colors.black,
+            //         ),
+            //         isExpanded: true,
+            //         items: vehicle.map(buildMenuItem).toList(),
+            //         onChanged: (value) => setState(() => vehicleType = value!),
+            //       ),
+            //     )),
+            // const SizedBox(
+            //   height: 20,
+            // ),
 
             //Enter password text field
             SizedBox(
@@ -440,8 +440,9 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
                     height: 160,
                     fit: BoxFit.cover,
                   )
-                : FlutterLogo(
-                    size: 160,
+                : Image.asset(
+                    'assets/images/truck.png',
+                    scale: 1,
                   ),
             const SizedBox(
               height: 30,
@@ -459,7 +460,7 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
                   FocusScope.of(context).unfocus();
                   String? usrename = _userNameTextController.text.trim();
                   QuerySnapshot snap = await FirebaseFirestore.instance
-                      .collection("buyer")
+                      .collection("users")
                       .where('username', isEqualTo: usrename)
                       .get();
                   try {
@@ -544,7 +545,7 @@ class _TransporterSignUpState extends State<TransporterSignUp> {
                   username: _userNameTextController.text,
                   name: _nameController.text,
                   vehicleNum: _vehicleNumberController.text,
-                  vehicletype: vehicleType,
+                  // vehicletype: vehicleType,
                   image: image!,
                   vehicledistrict: districtType,
                   vehicleprovince: provinceType,
