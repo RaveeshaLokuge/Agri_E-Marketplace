@@ -70,5 +70,5 @@ A detailed timeline for project development, including proposal, analysis, desig
 ## Conclusion
 The Agriculture E-commerce Platform aims to revolutionize the buying and selling process in Sri Lanka's agricultural sector. By leveraging technology, we seek to empower farmers, traders, and harvest transporters, fostering fair pricing, increased market access, and reduced corruption. This project represents a step towards a more efficient and equitable agricultural ecosystem.
 
-For more information or to contribute to the project, please contact [Project Team].
+For more information or to contribute to the project, please contact <a href="warunaraveesh@gmail.com">me</a>.
 
